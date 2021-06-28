@@ -26,7 +26,7 @@
             [clojure.string :as string]
             [clojure.walk :as walk])
   (:import
-   (clojure.lang ExceptionInfo)
+    (clojure.lang ExceptionInfo Keyword MapEntry)
    [honeysql.types SqlCall SqlRaw]
    [org.postgresql.util PGobject]))
 
@@ -1688,6 +1688,10 @@
    replacing it with `?`, used in a prepared statement"
   [node state]
   (cond
+    (instance? clojure.lang.Keyword node)
+
+    (instance? clojure.lang.MapEntry node)
+
     (binary-expression? node)
     {:node (assoc node :value "?")
      :state (conj state (:value node))}
